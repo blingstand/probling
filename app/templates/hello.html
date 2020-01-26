@@ -1,11 +1,64 @@
 <!DOCTYPE html>
- <html lang="en">
- <head>
-     <meta charset="UTF-8">
-     <link rel="stylesheet" href="../static/css/style.css" />
-     <title>Hello</title>
- </head>
- <body>
-     <h1>render_template() avec css réussi</h1>
- </body>
- </html>
+<html lang="en">
+<head>
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" Access-Control-Allow-Origin: * />
+    <title>Application GrandPy Bot</title>
+    <link rel="stylesheet" href="../static/css/style.css" />
+    <link rel="stylesheet" media="screen and (max-width: 1280px)" href="../static/css/handled_style.css" />
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCsqS4MLqsrTTmTkSCUNX97625NBJ4jXuI&language=fr">
+    </script>
+    <script src="../static/js/ajax.js"></script>
+    <script src="../static/js/message.js"></script>
+    <script src="../static/js/response.js"></script>
+</head>
+<body>
+    <div class="chatbox">
+        <div id="chatlogs"> <!-- ------------------------------ -->
+            <div class="chat GPB">
+                <div class="GPB-photo"></div>
+                <p class="chat-message">Ah te voilà ! Que puis-je pour toi aujourd'hui ? Pose moi une question ! </p>
+            </div>
+
+
+        </div><!-- --------------------------------------------- -->
+    </div>
+    <div class="chat-form">
+            <input type="text" placeholder="ex : Est-ce que tu connais l'adresse ... ?" id="myInput" autofocus/>
+            <div class="button">
+                <button type="button" onclick="InteractionWithGPB()">Valider</button>
+            </div>
+    </div>
+    <footer>
+        <p>Adrien Clupot <a href="https://github.com/blingstand" target="_blank">lien github</a></p>
+    </footer> <!-- ------------------------------------- -->
+    <script type="text/javascript">
+        //my var
+        // let myQuestion = "as-tu des informations sur bordeaux ?";
+        const message = new Message();
+        let url = "http://127.0.0.1:5000/index/question";
+
+        //main =)
+        let InteractionWithGPB = function(){
+            //user asks a question
+            let myQuestion = message.getMessage("myInput");
+            message.question(myQuestion);
+            let height = chatlogs.scrollHeight;
+            setTimeout(function(){message.scrollDown(height)},1000);
+            //grandPy thinks
+            const ajaxRequest = new AjaxRequest();
+            gPBMemory = ajaxRequest.getResponse(url, myQuestion);
+
+            //grandPy answers
+            gPBMemory.then(function(resp){
+                const responseGPB = new Response(resp);
+                lastChatMessage = message.response();
+                responseGPB.greatMessage(lastChatMessage);
+            });
+        }
+
+    </script>
+
+</body>
+</html>
+
