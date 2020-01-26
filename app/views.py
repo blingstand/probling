@@ -1,20 +1,35 @@
+# -*- coding: utf-8 -*-
+from flask import request, jsonify, render_template
 from app import app
-from flask import render_template
+from flask_cors import CORS, cross_origin
+from apiPro7 import Parser, GeoCoding, WikiDatas
+
+
 
 @app.route('/')
+@app.route('/index')
 def index():
-    return render_template("index.html")
+    """load welcome page"""
+    return render_template('index.html', title='Home')
 
-@app.route('/test')
-def test():
-    return """
-<!DOCTYPE html>
- <html lang="en">
- <head>
-     <meta charset="UTF-8">
-     <title>Test</title>
- </head>
- <body>
-     <h1>Test fonctionne toujours</h1>
- </body>
- </html> """
+@app.route("/index/question", methods=["POST"])
+@cross_origin()
+def question():
+    """Answers the question"""
+    data = request.get_json()
+
+    parser = Parser(data["message"])
+    parsed_msg = parser.crazy_parser()
+
+    geo_tool = GeoCoding(parsed_msg)
+    coord = [round(geo_tool.latitude, 5), round(geo_tool.longitude, 5)]
+
+    wiki = WikiDatas(parsed_msg, 200)
+    summary, url = wiki.access_page()
+
+
+    return jsonify({"message":parsed_msg,
+        "coordinates":coord,
+        "summary":summary,
+        "url":url})
+
