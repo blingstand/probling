@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask import request, jsonify, render_template
 from app import app
-from flask_cors import CORS, cross_origin
 from apiPro7 import Parser, GeoCoding, WikiDatas
 
 
@@ -13,7 +12,7 @@ def index():
     return render_template('index.html', title='Home')
 
 @app.route("/index/question", methods=["POST"])
-@cross_origin()
+
 def question():
     """Answers the question"""
     data = request.get_json()

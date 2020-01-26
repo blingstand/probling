@@ -35,12 +35,16 @@
     <script type="text/javascript">
         //my var
         // let myQuestion = "as-tu des informations sur bordeaux ?";
+        let Wscreen=screen.width;
+        let Hscreen=screen.height;
+
         const message = new Message();
         let url = "http://127.0.0.1:5000/index/question";
 
         //main =)
         let InteractionWithGPB = function(){
             //user asks a question
+            alert("dimension : "+ Wscreen + ", "+ Hscreen + ".")
             let myQuestion = message.getMessage("myInput");
             message.question(myQuestion);
             let height = chatlogs.scrollHeight;
