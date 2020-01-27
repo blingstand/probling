@@ -5,15 +5,18 @@ class Response{
         this.thirdResponse = this.thirdResponse(resp["summary"], resp["url"]);
     }
 
+    scrollDown = function(){
+        let height = chatlogs.scrollHeight;
+        setTimeout(function(){message.scrollDown(height);},1000);
+    }
     greatMessage = function(container){
         //gathers the three parts of the answer
         container.appendChild(this.firstResponse);
         container.appendChild(this.secondResponse);
         container.appendChild(this.thirdResponse);
         //scroll down
-        let height = chatlogs.scrollHeight;
-        setTimeout(function(){message.scrollDown(height);},1000);
-        }
+        this.scrollDown();
+    }
     firstResponse = function(parsed){
     //displays parsed answer
     let elemP = document.createElement("p");

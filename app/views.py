@@ -18,16 +18,19 @@ def question():
 
     parser = Parser(data["message"])
     parsed_msg = parser.crazy_parser()
+    is_response = 0
+    if parsed_msg is not None:
+        is_response = 1
+        geo_tool = GeoCoding(parsed_msg)
+        coord = [round(geo_tool.latitude, 5), round(geo_tool.longitude, 5)]
 
-    geo_tool = GeoCoding(parsed_msg)
-    coord = [round(geo_tool.latitude, 5), round(geo_tool.longitude, 5)]
-
-    wiki = WikiDatas(parsed_msg, 200)
-    summary, url = wiki.access_page()
-
-
-    return jsonify({"message":parsed_msg,
-        "coordinates":coord,
-        "summary":summary,
-        "url":url})
+        wiki = WikiDatas(parsed_msg, 200)
+        summary, url = wiki.access_page()
+        return jsonify({"is_response": is_response,
+            "message":parsed_msg,
+            "coordinates":coord,
+            "summary":summary,
+            "url":url})
+    else:
+        return jsonify({"is_response": is_response})
 

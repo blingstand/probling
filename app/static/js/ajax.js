@@ -25,15 +25,7 @@ class AjaxRequest{
 
     return response
   }
-  // ********* GPB THINKS
-  thinkngGPB = function(url, msg){
-    this.getResponse(url, msg).then(function(response){
-      let message = response.message
-      // let coordinates = response.coordinates
-      // let extractWiki = "response.extractWiki à venir"
-      return message, coordinates, extractWiki
-  });
-}
+  // ********* GPB THINKS à ajouter
 
 }
 

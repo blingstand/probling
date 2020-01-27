@@ -5,7 +5,7 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8" Access-Control-Allow-Origin: * />
     <title>Application GrandPy Bot</title>
     <link rel="stylesheet" href="../static/css/style.css" />
-    <link rel="stylesheet" media="screen and (max-width: 1280px)" href="../static/css/handled_style.css" />
+    <!-- <link rel="stylesheet" media="screen and (max-width: 1280px)" href="../static/css/handled_style.css" /> -->
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCsqS4MLqsrTTmTkSCUNX97625NBJ4jXuI&language=fr">
     </script>
     <script src="../static/js/ajax.js"></script>
@@ -60,11 +60,16 @@
             const ajaxRequest = new AjaxRequest();
             gPBMemory = ajaxRequest.getResponse(url, myQuestion);
 
-            //grandPy answers
+            //grandPy answers if he can
             gPBMemory.then(function(resp){
-                const responseGPB = new Response(resp);
                 lastChatMessage = message.response();
+                if (resp["is_response"] == 1){
+                const responseGPB = new Response(resp);
+                console.log(resp)
                 responseGPB.greatMessage(lastChatMessage);
+                }else{
+                    lastChatMessage.textContent = "Désolé je ne connais pas cet endroit ... \nPeut-être pourrais-tu reformuler ou me poser une autre question ?"
+                }
             });
         }
 
