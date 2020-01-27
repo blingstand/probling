@@ -24,7 +24,7 @@
         </div><!-- --------------------------------------------- -->
     </div>
     <div class="chat-form">
-            <input type="text" placeholder="ex : Est-ce que tu connais l'adresse ... ?" id="myInput" autofocus/>
+            <input type="text" placeholder="ex : Est-ce que tu connais l'adresse ... ?" id="myInput" onkeypress="validate(event)" autofocus/>
             <div class="button">
                 <button type="button" onclick="InteractionWithGPB()">Valider</button>
             </div>
@@ -42,8 +42,13 @@
 
         //I need the url
         let url = document.location.href + "index/question";
-        alert(url)
 
+        let validate = function(event){
+            //starts a search when user push entry (keyCode = 13)
+            if(event.keyCode == 13){
+                InteractionWithGPB()
+            }
+        }
         //main =)
         let InteractionWithGPB = function(){
             //user asks a question
