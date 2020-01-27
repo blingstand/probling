@@ -4,18 +4,14 @@ class Response{
         this.secondResponse = this.secondResponse(resp["coordinates"]);
         this.thirdResponse = this.thirdResponse(resp["summary"], resp["url"]);
     }
-
-    scrollDown = function(){
-        let height = chatlogs.scrollHeight;
-        setTimeout(function(){message.scrollDown(height);},1000);
-    }
     greatMessage = function(container){
         //gathers the three parts of the answer
         container.appendChild(this.firstResponse);
         container.appendChild(this.secondResponse);
         container.appendChild(this.thirdResponse);
         //scroll down
-        this.scrollDown();
+        let height = chatlogs.scrollHeight;
+        setTimeout(function(){message.scrollDown(height);},1000);
     }
     firstResponse = function(parsed){
     //displays parsed answer
