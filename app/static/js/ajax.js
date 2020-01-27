@@ -21,7 +21,7 @@ class AjaxRequest{
   getResponse = async function(url, msg){
     let response = await this.ajax(url, msg);
     response = JSON.parse(response)
-    console.log(response)
+    console.log(url)
 
     return response
   }

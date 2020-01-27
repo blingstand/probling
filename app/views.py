@@ -6,7 +6,6 @@ from apiPro7 import Parser, GeoCoding, WikiDatas
 
 
 @app.route('/')
-@app.route('/index')
 def index():
     """load welcome page"""
     return render_template('index.html', title='Home')

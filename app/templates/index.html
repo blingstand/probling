@@ -39,14 +39,14 @@
         let Hscreen=screen.height;
 
         const message = new Message();
-        // let url = "http://127.0.0.1:5000/index/question";
-        let url = "https://probling.herokuapp.com/index/question";
 
+        //I need the url
+        let url = document.location.href + "index/question";
+        alert(url)
 
         //main =)
         let InteractionWithGPB = function(){
             //user asks a question
-            alert("dimension : "+ Wscreen + ", "+ Hscreen + ".")
             let myQuestion = message.getMessage("myInput");
             message.question(myQuestion);
             let height = chatlogs.scrollHeight;
