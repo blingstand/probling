@@ -11,8 +11,7 @@ class Message{
 
         //class from css
         // container.classList.add('container');
-        selfChat.classList.add('Self');
-        selfChat.classList.add('chat');
+        selfChat.classList.add('chatSelf');
         userPhoto.classList.add("SELF-photo");
         selfMessage.classList.add('chat-message');
 
@@ -32,10 +31,9 @@ class Message{
 
         //class from css
         // container.classList.add('container');
-        gPBChat.classList.add('GPB');
-        gPBChat.classList.add('chat');
+        gPBChat.classList.add('chatGPB');
         userPhoto.classList.add("GPB-photo");
-        gPBMessage.classList.add('chat-message');
+        gPBMessage.classList.add('rep-chat-message');
 
 
         //appends new elements
@@ -44,7 +42,7 @@ class Message{
         gPBChat.appendChild(gPBMessage);
 
         //returns id of gPBMessage
-        let classNameChatMessage = document.getElementsByClassName("chat-message");
+        let classNameChatMessage = document.getElementsByClassName("rep-chat-message");
         let lastChatMessage =  classNameChatMessage[classNameChatMessage.length - 1];
         lastChatMessage.style.margin_top="5px";
 

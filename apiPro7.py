@@ -1,9 +1,12 @@
+#!/usr/bin/python3
+# -*- coding: utf8 -*-
+
 import googlemaps
 import requests
 
 class Parser():
     #cette classe analyse une demande et interroge des api pour y répondre
-    COURTESY = ["stp", "s'il te plaît", "s'il te plait", "svp", "s'il vous plaît","s'il vous plait"]
+    COURTESY = ["stp", "s'il te plait", "s'il te plaît", "svp", "s'il vous plaît","s'il vous plait"]
     CONNAITRE = ["connais", "connaissez", "connais-tu", "Connais-tu", "connaissez-vous", "Connaissez-vous"]
     POUVOIR = ["peux-tu", "Peux-tu", "pouvez-vous", "Pouvez-vous"]
     SAVOIR = ["sais-tu", "Sais-tu", "savez-vous", "Savez-vous"]
@@ -17,7 +20,7 @@ class Parser():
     def _take_off_ponctuation(self, sentence):
         #returns a sentence without ponctuation
         for ponctuation in ".!?;":
-            sentence = sentence.replace(ponctuation, "")
+            sentence = sentence.replace(ponctuation, " ")
         return sentence
     def _take_off_courtesy(self, sentence):
         #returns a sentence without ponctuation
@@ -103,7 +106,7 @@ class Parser():
         list_of_words = self.list_of_words
         for index, word in enumerate(list_of_words):
             #is-there interrogative word ?
-            if word in ["où", "Où"]:
+            if word in [u"où", u"Où"]:
                 response = self._whereparser(index, word, list_of_words)
             elif word in self.CONNAITRE or word in self.SAVOIR or word in self.AVOIR:
                 response = self._doyouknow(index, word, list_of_words)
@@ -115,7 +118,7 @@ class Parser():
                 pass
 
         if response == "":
-            print(list_of_words) #for debug
+            print("pb : ", list_of_words) #for debug
         else:
         #Be carefull : crazy_parser has to return a string
             to_return= ""

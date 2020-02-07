@@ -29,7 +29,7 @@ body{
             overflow-y: scroll;
         }
 
-        .chat{
+        .chatGPB, .chatSelf{
             display: flex ;
             flex-flow:  row wrap;
             align-items : flex-start;
@@ -56,7 +56,7 @@ body{
             border-radius: 50%;
         }
 
-        .chat .chat-message{
+        .chat-message, .rep-chat-message{
             width : 70%;
             padding: 15px;
             margin : 5px 10px 0;
@@ -64,17 +64,18 @@ body{
             color: #fff;
             font-size : 18px;
         }
-        .chat .chat-message > p{
+        .chat-message > p{
             margin-top: 5px;
         }
-        .GPB .chat-message{
+        .chatGPB .chat-message, .chatGPB .rep-chat-message {
             background: #c52435;
         }
 
-        .Self .chat-message{
+        .chatSelf .chat-message{
             background: #2abbf1;
             order: -1;
         }
+        
 
     .chat-form{
         background : blue;
@@ -91,7 +92,7 @@ body{
             height : 30px;
             width : 115px;
         }
-        .button{
+        #button{
             width : 120px;
             margin : 10px auto;
         }
@@ -124,7 +125,7 @@ body{
             background: #fbfbfb;
         }
 
-            .chat{
+            .chatGPB, .chatSELF{
                 display: flex ;
                 flex-flow:  row wrap;
                 align-items : flex-start;
@@ -151,7 +152,11 @@ body{
                 border-radius: 50%;
             }
 
-            .chat .chat-message{
+            .chat-message{
+                display: flex ;
+                flex-flow:  row wrap;
+                align-items : flex-start;
+                margin-bottom: 10px;
                 width : 70%;
                 padding: 15px;
                 margin : 1%;
@@ -159,7 +164,7 @@ body{
                 color: #fff;
                 transform: translateY(3%);
             }
-            .chat .chat-message > p{
+            .chat-message > p{
                 margin-top: 5px;
             }
             .GPB .chat-message{
@@ -190,7 +195,7 @@ body{
             width : 94%; height : auto;
             margin : 3% auto;
         }
-        .button{
+        #button{
             /*display : none;*/
             width : 120px;
             margin : 3% auto;

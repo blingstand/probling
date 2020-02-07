@@ -16,7 +16,7 @@ class Response{
     firstResponse = function(parsed){
     //displays parsed answer
     let elemP = document.createElement("p");
-    elemP.innerHTML = "Laisse moi t'en parler un peu :) Tout d'abord, cela se trouve ici :";
+    elemP.innerHTML = "Laisse-moi t'en parler un peu :) Tout d'abord, cela se trouve ici :";
     return elemP;
     };
 

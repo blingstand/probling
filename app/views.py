@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*-
+#!/usr/bin/python3
+# -*- coding: utf8 -*-
 from flask import request, jsonify, render_template
 from app import app
 from apiPro7 import Parser, GeoCoding, WikiDatas
@@ -15,7 +16,6 @@ def index():
 def question():
     """Answers the question"""
     data = request.get_json()
-
     parser = Parser(data["message"])
     parsed_msg = parser.crazy_parser()
     is_response = 0
@@ -23,7 +23,6 @@ def question():
         is_response = 1
         geo_tool = GeoCoding(parsed_msg)
         coord = [round(geo_tool.latitude, 5), round(geo_tool.longitude, 5)]
-
         wiki = WikiDatas(parsed_msg, 200)
         summary, url = wiki.access_page()
         return jsonify({"is_response": is_response,

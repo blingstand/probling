@@ -15,7 +15,7 @@
 <body>
     <div class="chatbox">
         <div id="chatlogs"> <!-- ------------------------------ -->
-            <div class="chat GPB">
+            <div class="chatGPB">
                 <div class="GPB-photo"></div>
                 <p id="size" class="chat-message">Ah te voilà ! Que puis-je pour toi aujourd'hui ? Pose-moi une question ! </p>
             </div>
@@ -25,7 +25,7 @@
     </div>
     <div class="chat-form">
             <input type="text" placeholder="ex : Est-ce que tu connais l'adresse ... ?" id="myInput" onkeypress="validate(event)" autofocus/>
-            <div class="button">
+            <div id="button">
                 <button type="button" onclick="InteractionWithGPB()">Valider</button>
             </div>
     </div>
@@ -35,12 +35,6 @@
     <script type="text/javascript">
         //my var
         // let myQuestion = "as-tu des informations sur bordeaux ?";
-
-        function resize() {
-            chatlogs.textContent = window.innerHeight+ ", "+ window.innerWidth;
-        }
-
-        window.onresize = resize;
 
         let message = new Message()
         //I need the url
@@ -73,7 +67,7 @@
                 }else{
                     lastChatMessage.textContent = "Désolé je ne connais pas cet endroit ... \nPeut-être pourrais-tu reformuler ou me poser une autre question ?"
                     let chatlogsSize = chatlogs.scrollHeight;
-                    alert(chatlogsSize)
+                    
                     message.scrollDown(chatlogsSize)
 
                 }

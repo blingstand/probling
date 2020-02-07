@@ -2,9 +2,10 @@ from flask import Flask
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)
-app.config['CORS_HEADERS'] = 'Content-Type'
 
+app.config['TESTING'] = True
+app.config['CORS_HEADERS'] = 'Content-Type'
+CORS(app)
 
 from app import views
 
