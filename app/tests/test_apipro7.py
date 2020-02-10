@@ -38,7 +38,7 @@ class TestApiPro7():
 
     #2
     def test_crazy_parser(self):
-        #for each question concerning "Bordeaux" I want to test wether the answer will be "Bordeaux"
+        #for each question concerning a location I want to test wether the answer will be "le pont Chaban-Delmas", "la tour Eiffel" ou "openClassrooms"
         #I create a few question :
         questions = ["où se trouve le pont Chaban-Delmas ?",#1
         "Où se trouve le pont Chaban-Delmas ?",
@@ -77,7 +77,9 @@ class TestApiPro7():
         "Est-ce que vous connaissez le pont Chaban-Delmas ?", #35
         "Est-ce que tu connais l'adresse du pont Chaban-Delmas ? ",
         "Est-ce que vous connaissez l'adresse du pont Chaban-Delmas ? ",
-        "Est-ce que vous connaissez l'adresse d'Openclassroom ? "
+        "Est-ce que vous connaissez l'adresse d'Openclassroom ? ",
+        "Où se situe le pont Chaban-Delmas ?",
+        "Où est le pont Chaban-Delmas ?"
         ]
         count = 0
         for question in questions:

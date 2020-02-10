@@ -11,6 +11,7 @@
     <script src="../static/js/ajax.js"></script>
     <script src="../static/js/message.js"></script>
     <script src="../static/js/response.js"></script>
+    <script src="../static/js/main.js"></script>
 </head>
 <body>
     <div class="chatbox">
@@ -19,63 +20,20 @@
                 <div class="GPB-photo"></div>
                 <p id="size" class="chat-message">Ah te voilà ! Que puis-je pour toi aujourd'hui ? Pose-moi une question ! </p>
             </div>
-
-
         </div><!-- --------------------------------------------- -->
     </div>
+    <div id="triangle"></div>
     <div class="chat-form">
-            <input type="text" placeholder="ex : Est-ce que tu connais l'adresse ... ?" id="myInput" onkeypress="validate(event)" autofocus/>
-            <div id="button">
-                <button type="button" onclick="InteractionWithGPB()">Valider</button>
+
+            <input type="text" placeholder="ex : Connais-tu l'adresse de ... ?" id="myInput" onkeypress="validate(event)" autofocus/>
+            <div id="last_line">
+                <p id="name">Adrien Clupot </p>
+                <p id="github"> <a href="https://github.com/blingstand" target="_blank"><img src="../static/pictures/github.png" alt="logo github"></a></p>
+                <p><button type="button" onclick="InteractionWithGPB()">Valider</button></p>
+
             </div>
     </div>
-    <footer>
-        <p>Adrien Clupot <a href="https://github.com/blingstand" target="_blank">lien github</a></p>
-    </footer> <!-- ------------------------------------- -->
-    <script type="text/javascript">
-        //my var
-        // let myQuestion = "as-tu des informations sur bordeaux ?";
-
-        let message = new Message()
-        //I need the url
-        let url = document.location.href + "index/question";
-
-        let validate = function(event){
-            //starts a search when user push entry (keyCode = 13)
-            if(event.keyCode == 13){
-                InteractionWithGPB()
-            }
-        }
-        //main =)
-        let InteractionWithGPB = function(){
-            //user asks a question
-            let myQuestion = message.getMessage("myInput");
-            message.question(myQuestion);
-            let height = chatlogs.scrollHeight;
-            setTimeout(function(){message.scrollDown(height)},1000);
-            //grandPy thinks
-            const ajaxRequest = new AjaxRequest();
-            gPBMemory = ajaxRequest.getResponse(url, myQuestion);
-
-            //grandPy answers if he can
-            gPBMemory.then(function(resp){
-                lastChatMessage = message.response();
-                if (resp["is_response"] == 1){
-                const responseGPB = new Response(resp);
-                console.log(resp)
-                responseGPB.greatMessage(lastChatMessage);
-                }else{
-                    lastChatMessage.textContent = "Désolé je ne connais pas cet endroit ... \nPeut-être pourrais-tu reformuler ou me poser une autre question ?"
-                    let chatlogsSize = chatlogs.scrollHeight;
-                    
-                    message.scrollDown(chatlogsSize)
-
-                }
-            });
-        }
-
-    </script>
-
+    <!-- ------------------------------------- -->
 </body>
 </html>
 

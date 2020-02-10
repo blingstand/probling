@@ -47,10 +47,11 @@ class Parser():
         return response
 
     def _whereparser(self, index, word, list_of_words):
-        if list_of_words[index+1 : index+3] == ['se', 'trouve']:
+        if list_of_words[index+1 : index+3] in (['se', 'trouve'],['se', 'situe']):
             return list_of_words[index+3:]
-        elif list_of_words[index+1] == "trouve-t'on":
+        elif list_of_words[index+1] in ("est", "trouve-t'on"):
             return list_of_words[index+2:]
+
 
     def in_doyouknow(self, index, list_of_words):
             response = ""
@@ -117,7 +118,7 @@ class Parser():
             else:
                 pass
 
-        if response == "":
+        if response in ("", None) :
             print("pb : ", list_of_words) #for debug
         else:
         #Be carefull : crazy_parser has to return a string

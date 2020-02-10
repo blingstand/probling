@@ -1,6 +1,7 @@
 html{
     height : 100%;
 }
+
 @media screen and (min-width: 601px)
 {
 body{
@@ -13,17 +14,18 @@ body{
     .chatbox{
         width:  500px;
         min-width:  390px;
-        height: 450px;
+        height: 430px;
         background: #fff;
         padding: 25px;
-        margin : 20px auto 0px auto;
+        margin : 0px auto;
         box-shadow: 0 3px #ccc;
+        overflow: hidden;
     }
 
         #chatlogs{
             padding: 10px;
             width: 100%;
-            height : 450px;
+            height : 444px;
             background: #fbfbfb;
             overflow-x: hidden;
             overflow-y: scroll;
@@ -51,7 +53,7 @@ body{
             height : 60px;
             background-image: url("../pictures/Schtroumpfs.png") ;
             background-repeat: no-repeat;
-            transform: translateY(25%);
+            transform: translateY(3%);
             background-color: #fff;
             border-radius: 50%;
         }
@@ -69,6 +71,7 @@ body{
         }
         .chatGPB .chat-message, .chatGPB .rep-chat-message {
             background: #c52435;
+            min-height: 30px;
         }
 
         .chatSelf .chat-message{
@@ -76,26 +79,58 @@ body{
             order: -1;
         }
         
-
     .chat-form{
         background : blue;
         margin : 0px auto;
         width:  500px;
         min-width:  390px;
-        padding: 25px;
+        padding: 15px 25px;
     }
         input {
             height : 30px; width : 480px;
         }
 
-        button{
-            height : 30px;
-            width : 115px;
-        }
-        #button{
-            width : 120px;
+        #last_line{
+            width : 100%;
             margin : 10px auto;
+            display: flex;
+            justify-content: space-around;
         }
+            #name{
+
+                width: 120px; height: 25px;
+                color : white;
+            }
+            button{
+                height : 30px;
+                width : 115px;
+                transform: translateY(-25%);
+
+            }
+            #github img{
+
+                transform: translateY(-25%);
+            }
+    
+
+    #triangle{
+        float: left;
+        width: 6%;
+        height: 35px;
+        margin-left: 48%;
+        margin-top : -2%;
+        transform: rotate(180deg);
+        background-image: url("../pictures/triangle.png");
+        background-repeat: no-repeat;
+    }
+    @-webkit-keyframes my_anim {
+        0% {transform: rotate(180deg);transform-origin: center;}
+
+        100% {transform: rotate(900deg); transform-origin: center; }
+    }
+    .animation{
+        animation: my_anim 2s;}
+
 }
 
 @media screen and (max-width: 600px)
@@ -152,7 +187,7 @@ body{
                 border-radius: 50%;
             }
 
-            .chat-message{
+            .chat-message, .rep-chat-message{
                 display: flex ;
                 flex-flow:  row wrap;
                 align-items : flex-start;
@@ -167,11 +202,12 @@ body{
             .chat-message > p{
                 margin-top: 5px;
             }
-            .GPB .chat-message{
+             .chatGPB .chat-message, .chatGPB .rep-chat-message {
                 background: #c52435;
+                min-height: 15px;
             }
 
-            .Self .chat-message{
+            .chatSelf .chat-message{
                 background: #2abbf1;
                 order: -1;
             }
@@ -200,6 +236,7 @@ body{
             width : 120px;
             margin : 3% auto;
         }
+
 
 footer{
     display: none;
