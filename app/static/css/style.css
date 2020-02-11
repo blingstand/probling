@@ -107,9 +107,10 @@ body{
                 transform: translateY(-25%);
 
             }
-            #github img{
-
-                transform: translateY(-25%);
+            #github{
+                cursor: pointer;
+                background-image: url("../pictures/github.png") ;
+                width : 40px; height : 40px;
             }
     
 
@@ -256,6 +257,7 @@ body{
 
             }
             #github{
+                cursor: pointer;
                 background-image: url("../pictures/github.png") ;
                 width : 40px; height : 40px;
                 background-size: contain;
