@@ -1,4 +1,4 @@
-html{
+html, body {
     height : 100%;
 }
 
@@ -12,9 +12,8 @@ body{
     background: #2cb8f0;
     }
     .chatbox{
-        width:  500px;
-        min-width:  390px;
-        height: 430px;
+        width:  49%;
+        height: 66%; 
         background: #fff;
         padding: 25px;
         margin : 0px auto;
@@ -23,6 +22,7 @@ body{
     }
 
         #chatlogs{
+
             padding: 10px;
             width: 100%;
             height : 444px;
@@ -37,7 +37,6 @@ body{
             align-items : flex-start;
             margin-bottom: 10px;
         }
-
         .GPB-photo{
             width: 60px;
             height : 60px;
@@ -64,7 +63,7 @@ body{
             margin : 5px 10px 0;
             border-radius: 30px;
             color: #fff;
-            font-size : 18px;
+            font-size: smaller;
         }
         .chat-message > p{
             margin-top: 5px;
@@ -80,15 +79,16 @@ body{
         }
         
     .chat-form{
+
         background : blue;
         margin : 0px auto;
-        width:  500px;
-        min-width:  390px;
+        width:  49%; 
         padding: 15px 25px;
     }
         input {
-            height : 30px; width : 480px;
-        }
+            height: auto; width: 80%;
+            margin-left: 8%; 
+            margin-top: 5%;       }
 
         #last_line{
             width : 100%;
@@ -114,14 +114,17 @@ body{
     
 
     #triangle{
-        float: left;
-        width: 6%;
-        height: 35px;
-        margin-left: 48%;
-        margin-top : -2%;
-        transform: rotate(180deg);
+        display:none;
         background-image: url("../pictures/triangle.png");
         background-repeat: no-repeat;
+        float: left;
+        position : absolute;
+        left : 49%; 
+        top : 49%; 
+        flex-shrink : 0;
+        width: 42px; height : 42px;
+        transform: rotate(180deg);
+        
     }
     @-webkit-keyframes my_anim {
         0% {transform: rotate(180deg);transform-origin: center;}
@@ -137,52 +140,56 @@ body{
 {
 body{
     position : relative;
-    top: 0%; left : 0%;
+    top: 0%; left : -1.5%;
     display : flex;
     flex-direction: column;
-    width : 98%; height: 100%;
+    width : 100%;
     font-family: Tahoma, Geneva, sans-serif;
-    font-size: 20px;
+    font-size: 15px;
     box-sizing: border-box;
     background: red;
     overflow: hidden;
 }
     .chatbox{
-        width: 98%; height: 80%;
+        width: 98%; height: 75%;
+        margin-top : 1%;
         background: #fff;
         box-shadow: 0 3px #ccc;
         overflow-x: hidden;
         overflow-y: scroll;
+        flex-shrink: 0;
+        z-index : 1; 
     }
 
         #chatlogs{
-            padding: 10px;
+            padding: 10px 0px;
+            margin-right : -60px;
             background: #fbfbfb;
         }
 
-            .chatGPB, .chatSELF{
+            .chatGPB, .chatSelf{
                 display: flex ;
                 flex-flow:  row wrap;
                 align-items : flex-start;
-                margin-bottom: 10px;
+                margin: 1%;
             }
 
             .GPB-photo{
-                width: 60px;
-                height : 60px;
                 background-image: url("../pictures/grandPy.png") ;
+                width : 40px; height : 40px;
+                background-size: contain;
                 background-repeat: no-repeat;
-                transform: translateY(25%);
+                transform: translateY(50%);
                 background-color: white;
                 border-radius: 50%;
             }
 
             .SELF-photo{
-                width: 60px;
-                height : 60px;
-                background-image: url("../pictures/Schtroumpfs.png") ;
+                width : 40px; height : 40px;
+                background-size: contain;
                 background-repeat: no-repeat;
-                transform: translateY(25%);
+                background-image: url("../pictures/Schtroumpfs.png") ;
+                transform: translateY(-3%);
                 background-color: #fff;
                 border-radius: 50%;
             }
@@ -191,13 +198,13 @@ body{
                 display: flex ;
                 flex-flow:  row wrap;
                 align-items : flex-start;
-                margin-bottom: 10px;
-                width : 70%;
-                padding: 15px;
-                margin : 1%;
+                width : 64%; min-height : 20px;
+                padding : 3%;
+                margin : 1% 0%;
                 border-radius: 30px;
                 color: #fff;
                 transform: translateY(3%);
+                font-size: smaller;
             }
             .chat-message > p{
                 margin-top: 5px;
@@ -205,6 +212,7 @@ body{
              .chatGPB .chat-message, .chatGPB .rep-chat-message {
                 background: #c52435;
                 min-height: 15px;
+
             }
 
             .chatSelf .chat-message{
@@ -213,33 +221,68 @@ body{
             }
 
     .chat-form{
-        /*display : none;*/
-        position : relative;
-        top: -1%; left : -1%;
-        width:  98%; height: 20%;
+        position : absolute;
+        top: 71%; left : -1%;
+        width:  98%; height : auto; 
+        min-height: 25%;
         margin: 1%;
         background : blue;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        z-index : 1;
     }
         input {
             /*display : none;*/
             width : 70%; height : 34%;
-            margin : 3% 14%;
+            margin: 0% 14%;
         }
 
-        button{
-            /*display : none;*/
-            width : 94%; height : auto;
-            margin : 3% auto;
+        #last_line{
+            width : 100%;
+            height : 35px;
+            display: flex;
+            justify-content: space-around;
         }
-        #button{
-            /*display : none;*/
-            width : 120px;
-            margin : 3% auto;
-        }
+            #name{
 
+                width: 120px; height: 25px;
+                color : white;
+            }
+            button{
+                height : 30px;
+                width : 115px;
+                transform: translateY(-25%);
 
-footer{
-    display: none;
-}
+            }
+            #github{
+                background-image: url("../pictures/github.png") ;
+                width : 40px; height : 40px;
+                background-size: contain;
+                background-repeat: no-repeat;
+            }
+    
 
+    #triangle{
+        display: none;
+        float: left;
+        z-index :2;
+        position : absolute; 
+        left: 48%;
+        top : 48%;
+        flex-shrink: 0; 
+        width: 42px;
+        height: 42px;
+        transform: rotate(180deg);
+        background-image: url("../pictures/triangle.png");
+        background-repeat: no-repeat;
+
+    }
+    @-webkit-keyframes my_anim {
+        0% {transform: rotate(180deg);transform-origin: center;}
+
+        100% {transform: rotate(900deg); transform-origin: center; }
+    }
+    .animation{
+        animation: my_anim 2s;}
 }

@@ -14,6 +14,7 @@ let validate = function(event){
 //main =)
 let InteractionWithGPB = function(){
     let triangle = document.getElementById('triangle')
+    triangle.style.display="block"
     triangle.classList.add('animation')
     console.log("searching ...")
 
@@ -42,6 +43,9 @@ let InteractionWithGPB = function(){
           }
         })
       triangle.classList.remove("animation");
+      triangle.style.display="none"
+      console.log("disparition")
+
     }, 2*1000)
 
     
