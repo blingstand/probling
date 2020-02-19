@@ -7,7 +7,7 @@ from selenium import webdriver
 import selenium.webdriver.support.ui as ui
 from selenium.webdriver.common.action_chains import ActionChains
 
-from apiPro7 import Parser, GeoCoding, WikiDatas
+from api_pro7 import Parser, GeoCoding, WikiDatas
 
 
 class TestApiPro7():

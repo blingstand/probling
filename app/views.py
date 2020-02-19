@@ -1,8 +1,9 @@
+""" script that gets a HTTP request and answer the browser """
 #!/usr/bin/python3
 # -*- coding: utf8 -*-
 from flask import request, jsonify, render_template
 from app import app
-from apiPro7 import Parser, GeoCoding, WikiDatas
+from api_pro7 import Parser, GeoCoding, WikiDatas
 
 
 
@@ -27,11 +28,7 @@ def question():
         coord = [round(geo_tool.latitude, 5), round(geo_tool.longitude, 5)]
         wiki = WikiDatas(parsed_msg, 200)
         summary, url = wiki.access_page()
-        return jsonify({"is_response": is_response,
-            "message":parsed_msg,
-            "coordinates":coord,
-            "summary":summary,
-            "url":url})
-    else:
-        return jsonify({"is_response": is_response})
-
+        return jsonify({"is_response": is_response, "message":parsed_msg, "coordinates":coord, \
+            "summary":summary, "url":url})
+    return jsonify({"is_response": is_response})
+    
