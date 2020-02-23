@@ -144,28 +144,32 @@ class GeoCoding():
         self.api_key = "AIzaSyCsqS4MLqsrTTmTkSCUNX97625NBJ4jXuI"
         self.exp_to_search = exp_to_search + ", france"
         #use ggm to get coordinate from a given expression
-        self.gmaps = googlemaps.Client(key=self.api_key)
-        self.geocode_result = self.gmaps.geocode(self.exp_to_search)
-        self.coordinate = self.extract_lat_long()
+        self.geocode = self.get_geocode() 
+        self.coordinates = self.extract_lat_long()
         #define lat and long
-        self.latitude = self.coordinate["lat"]
-        self.longitude = self.coordinate["lng"]
+        self.latitude = self.coordinates["lat"]
+        self.longitude = self.coordinates["lng"]
 
+    def get_geocode(self):
+        """ asks gmaps api for geocode, using an expression  """
+        gmaps = googlemaps.Client(key=self.api_key)
+        geocode_result = gmaps.geocode(self.exp_to_search)
+        geocode = geocode_result[0]
+        return geocode
 
     def extract_lat_long(self):
         """ returns the location datas from a given code """
-        dico = self.geocode_result[0]
+        dico = self.geocode
         geo = dico["geometry"]
         location = geo["location"]
         return location
 
-class WikiDatas():
+class WikiDatas(): #4 methods
     """ class that handles with WikiApi """
     def __init__(self, title, size):
         self.title = title
         self.size = size
         self.base = "https://fr.wikipedia.org/w/api.php?"
-        self.suggestion = self.get_suggestion()
 
 
     def _get_request(self, params):
@@ -174,17 +178,6 @@ class WikiDatas():
         params['action'] = "query"
         response = requests.get(self.base, params=params)
         return response.json()
-
-    def get_suggestion(self):
-        """ returns the first answer from a _get_request method """
-        params = {
-            'list': 'search',
-            'srinfo': 'suggestion',
-            'srsearch' : self.title}
-
-        response = self._get_request(params)
-        suggestion = response['query']['search'][0]["title"]
-        return suggestion
 
     def limit_size_wiki(self, my_text):
         """limits the size of the wiki text and
@@ -223,7 +216,7 @@ class WikiDatas():
             'redirects': '',
             'exintro' : "",
             'explaintext' : "",
-            'titles' : self.suggestion
+            'titles' : self.title
         }
         response = self._get_request(params)
         get_id = response['query']['pages']

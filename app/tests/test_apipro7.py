@@ -6,13 +6,27 @@
 from selenium import webdriver
 import selenium.webdriver.support.ui as ui
 from selenium.webdriver.common.action_chains import ActionChains
-
+from _pytest.monkeypatch import MonkeyPatch
 from api_pro7 import Parser, GeoCoding, WikiDatas
+import googlemaps
+import requests
 
+class GeocodeMock:
+    """ mock a ggmaps client object"""
+    
+    @staticmethod
+    def geocode(exp):
+        geo_answer = ["liste"]
+        return geo_answer
+class WikiMock:
+    """ mock a wiki api answer """
+    @staticmethod
+    def json():
+        return {"response": "response from WikiApi"}
 
 class TestApiPro7():
     SAMPLE = "le chat a 4 pattes."
-    GEOCODING = GeoCoding("Bergerac, France")
+    GEOCODING = GeoCoding("Bergerac")
     WIKI = WikiDatas("Bordeaux", 200)
     BIG_EXTRACT = """Bordeaux (prononcé /bɔʁ.do/1 Écouter) est une commune du Sud-Ouest de la France. Capitale de la Gaule aquitaine dès le début du IIIe siècle, puis du duché d'Aquitaine et enfin de l'ancienne province de Guyenne sous l'Ancien régime, elle est aujourd'hui le chef-lieu de la région Nouvelle Aquitaine, préfecture du département de la Gironde et le siège de Bordeaux Métropole."""
     SMALL_EXTRACT = """Bergerac est une commune française située dans le département de la Dordogne, en région Nouvelle-Aquitaine."""
@@ -21,6 +35,7 @@ class TestApiPro7():
     DRIVER = webdriver.Firefox()
     WAIT = ui.WebDriverWait(DRIVER, 1000)
 
+    monkeypatch = MonkeyPatch()
 
     #1
     def test_create_list_from_sentence(self):
@@ -91,13 +106,26 @@ class TestApiPro7():
 
     # ---------- geocoding
     #3
-    def test_lat_is_float(self):
-        #je vérifie que les coordonnées obtenues sont des floats
-        assert isinstance(self.GEOCODING.latitude, float)
+    def test_get_geocode(self):
+
+        def mock_get(*args, **kwargs):
+            return GeocodeMock()
+
+        # apply the monkeypatch for requests.get to mock_get
+        self.monkeypatch.setattr(googlemaps, "Client", mock_get)
+
+        result = self.GEOCODING.get_geocode()
+        assert result == "liste" 
+
 
     #4
     def test_long_is_float(self):
-        assert isinstance(self.GEOCODING.longitude, float)
+        verif = []
+        if isinstance(self.GEOCODING.latitude, float):
+            verif.append("lat is ok")
+        if isinstance(self.GEOCODING.longitude, float):
+            verif.append("long is ok")
+        assert verif == ['lat is ok', "long is ok"]
 
     #5
     def test_similarity_lat_long(self):
@@ -109,11 +137,18 @@ class TestApiPro7():
 
     # -------- wiki
     #6
-    def test_get_suggestion(self):
-        #test wether the first suggestion is equal to term of search
-        response = self.WIKI.get_suggestion()
-        assert response == "Bordeaux"
+    def test_get_request(self):
+        """Make sure to get a json resp"""
+        def mock_get(*args, **kwargs):
+            return WikiMock()
 
+        # apply the monkeypatch for requests.get to mock_get
+        self.monkeypatch.setattr(requests, "get", mock_get)
+
+        my_params = {"a":"b"}
+        # app.get_json, which contains requests.get, uses the monkeypatch
+        result = self.WIKI._get_request(my_params)
+        assert result["response"] == "response from WikiApi"
     #7
     def test_size_wiki_extract(self):
         """tests wether the extract can be reduced"""
@@ -129,13 +164,13 @@ class TestApiPro7():
         three_last_caracters = self.REDUCED_EXTRACT1[len(self.REDUCED_EXTRACT1)-3:]
         assert three_last_caracters == "..."
 
-    def get_el(self, selector):
+    def _get_el(self, selector):
         return self.DRIVER.find_element_by_css_selector(selector)
 
     def open_page(self):
         self.DRIVER.get("http://127.0.0.1:5000/")
-        my_button = self.get_el("button")
-        my_input = self.get_el("#myInput")
+        my_button = self._get_el("button")
+        my_input = self._get_el("#myInput")
         return my_input, my_button 
 
     #10
@@ -159,7 +194,7 @@ class TestApiPro7():
         my_button.click()
         self.WAIT.until(lambda driver: self.DRIVER.find_element_by_css_selector(".chatSelf .chat-message").is_displayed())
         
-        chat_message = self.get_el(".chatSelf .chat-message")
+        chat_message = self._get_el(".chatSelf .chat-message")
         text_question = chat_message.text
         assert text_question == start_question
 
@@ -171,7 +206,7 @@ class TestApiPro7():
         my_button.click()
         self.WAIT.until(lambda driver: self.DRIVER.find_element_by_css_selector(".rep-chat-message").is_displayed())
         
-        chat_message = self.get_el(".rep-chat-message")
+        chat_message = self._get_el(".rep-chat-message")
         response_text = chat_message.text
         assert response_text == "Désolé je ne connais pas cet endroit ... Peut-être pourrais-tu reformuler ou me poser une autre question ?"
 
@@ -189,24 +224,16 @@ class TestApiPro7():
         my_button.click()
         self.WAIT.until(lambda driver: self.DRIVER.find_element_by_css_selector(".rep-chat-message").is_displayed())
         
-        chat_message = self.get_el(".rep-chat-message p:first-child")
+        chat_message = self._get_el(".rep-chat-message p:first-child")
         answer1 = chat_message.text
         answer1 = self.first_caracters(answer1, 32)
-        chat_message = self.get_el(".rep-chat-message p:nth-child(2)")
+        chat_message = self._get_el(".rep-chat-message p:nth-child(2)")
         if chat_message is not None:
             answer2 = True
-        chat_message = self.get_el(".rep-chat-message p:nth-child(3)")
+        chat_message = self._get_el(".rep-chat-message p:nth-child(3)")
         answer3 = chat_message.text
         answer3 = self.first_caracters(answer3, 8)
         expected_answer = ["Laisse-moi t'en parler un peu :)", True, "Bordeaux"]
         received_answer = [answer1, answer2, answer3]
         self.DRIVER.quit()
         assert expected_answer == received_answer
-
-        # try:
-            
-        # except Exception as e:
-        #     for index, key in  enumerate(expected_answer):
-        #         print(index, key, expected_answer[key], received_answer[key])  
-
-        
