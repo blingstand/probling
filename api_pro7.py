@@ -16,7 +16,7 @@ class Parser():
     SAVOIR = ["sais-tu", "Sais-tu", "savez-vous", "Savez-vous"]
     AVOIR = ["as-tu", "As-tu", "avez-vous", "Avez-vous"]
 
-    def __init__(self, sentence):
+    def __init__(self, sentence): #2 methods and 8 pivate methods
         self.sentence = sentence
         self.list_of_words = self.create_list_from_sentence()
 
@@ -41,8 +41,9 @@ class Parser():
         list_of_words = sentence.split(" ")
         try:
             list_of_words.remove("")
-        except Exception as error:
-            raise error
+            
+        except Exception as e:
+            raise e
         response = []
         for word in list_of_words:
             if len(word) > 0:
@@ -57,7 +58,7 @@ class Parser():
             return list_of_words[index+2:]
 
 
-    def in_doyouknow(self, index, list_of_words):
+    def _in_doyouknow(self, index, list_of_words):
         """ deals with complex cases of _doyouknow cases"""
         if "propos" in list_of_words:
             new_index = list_of_words.index("propos")
@@ -74,12 +75,14 @@ class Parser():
         """ extract the important expression in a _doyouknow case"""
         response = ""
         if list_of_words[index+1] == "l'adresse":
+            if list_of_words[index+2] == ['de', 'du', 'des']:
+                response = list_of_words[index+3:]
             response = list_of_words[index+2:]
         elif list_of_words[index+1] in ["de", "du", "des"] and \
         list_of_words[index+2] != "informations":
             return list_of_words[index+2:]
         else:
-            response = self.in_doyouknow(index, list_of_words)
+            response = self._in_doyouknow(index, list_of_words)
         return response
 
     def _canyoutalkabout(self, index, list_of_words):
@@ -138,14 +141,14 @@ class Parser():
                 return to_return[3:]
             return to_return
 
-class GeoCoding():
+class GeoCoding(): #2 methods
     """ Class that handles with GGM API"""
     def __init__(self, exp_to_search):
         self.api_key = "AIzaSyCsqS4MLqsrTTmTkSCUNX97625NBJ4jXuI"
         self.exp_to_search = exp_to_search + ", france"
         #use ggm to get coordinate from a given expression
         self.geocode = self.get_geocode() 
-        self.coordinates = self.extract_lat_long()
+        self.coordinates = self.extract_lat_long(self.geocode)
         #define lat and long
         self.latitude = self.coordinates["lat"]
         self.longitude = self.coordinates["lng"]
@@ -157,22 +160,20 @@ class GeoCoding():
         geocode = geocode_result[0]
         return geocode
 
-    def extract_lat_long(self):
+    def extract_lat_long(self, dico):
         """ returns the location datas from a given code """
-        dico = self.geocode
         geo = dico["geometry"]
         location = geo["location"]
         return location
 
-class WikiDatas(): #4 methods
+class WikiDatas(): #3 methods
     """ class that handles with WikiApi """
     def __init__(self, title, size):
         self.title = title
         self.size = size
         self.base = "https://fr.wikipedia.org/w/api.php?"
 
-
-    def _get_request(self, params):
+    def get_request(self, params):
         """ returns a JSON response from a given API """
         params['format'] = "json"
         params['action'] = "query"
@@ -184,25 +185,24 @@ class WikiDatas(): #4 methods
         add ... at the end"""
 
         if len(my_text) >= self.size:
-
             reduced_text = ""
             for caracter in my_text:
-                if len(reduced_text) <= self.size - 4: #to add "..." at the end
+                if len(reduced_text) <= self.size: #to add "..." at the end
                     reduced_text += caracter
                 else:
                     if reduced_text[-1] == ".":
                         reduced_text += ".."
+                        return reduced_text
                     else:
                         reduced_text = reduced_text[:-1] + "..."
-                    return reduced_text
-            return reduced_text
-        my_text = my_text[:-1] + "..."
+                        return reduced_text
+        my_text += "."
         return my_text
 
     def access_page(self):
         """ returns the summary and the url of the page
 
-            1/ call _get_request
+            1/ call get_request
             2/ get the page id
             3/ get the url and the summary
             4/ reduce the size of the summary
@@ -218,7 +218,7 @@ class WikiDatas(): #4 methods
             'explaintext' : "",
             'titles' : self.title
         }
-        response = self._get_request(params)
+        response = self.get_request(params)
         get_id = response['query']['pages']
         for i in get_id:
             pageid = i

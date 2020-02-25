@@ -1,45 +1,56 @@
 #!/usr/bin/python3
 # -*- coding: utf8 -*-
 """
-    Before to throw Pytest please run the app 
+    Before to throw Pytest please run the app
+    I don't test pivate method
 """
-from selenium import webdriver
-import selenium.webdriver.support.ui as ui
-from selenium.webdriver.common.action_chains import ActionChains
+
 from _pytest.monkeypatch import MonkeyPatch
-from api_pro7 import Parser, GeoCoding, WikiDatas
 import googlemaps
 import requests
+from api_pro7 import Parser, GeoCoding, WikiDatas
+from app.tests import datas
 
-class GeocodeMock:
-    """ mock a ggmaps client object"""
-    
+
+
+#these folowing functions help testing
+def mock_get(*args, **kwargs):
+    """ create a Mymock """
+    return MyMock()
+
+
+#Mockclass with 2 method
+class MyMock:
+    """ mock an obj with statics methods"""
     @staticmethod
-    def geocode(exp):
+    def geocode(*args, **kwargs):
+        """ returns a ggmaps client object"""
         geo_answer = ["liste"]
         return geo_answer
-class WikiMock:
-    """ mock a wiki api answer """
+
     @staticmethod
     def json():
+        """ ggmaps wiki api answer """
         return {"response": "response from WikiApi"}
 
+
+#testclass
 class TestApiPro7():
+    """ Class that gathers all the tests"""
     SAMPLE = "le chat a 4 pattes."
+    PARSER = Parser(SAMPLE)
     GEOCODING = GeoCoding("Bergerac")
     WIKI = WikiDatas("Bordeaux", 200)
-    BIG_EXTRACT = """Bordeaux (prononcé /bɔʁ.do/1 Écouter) est une commune du Sud-Ouest de la France. Capitale de la Gaule aquitaine dès le début du IIIe siècle, puis du duché d'Aquitaine et enfin de l'ancienne province de Guyenne sous l'Ancien régime, elle est aujourd'hui le chef-lieu de la région Nouvelle Aquitaine, préfecture du département de la Gironde et le siège de Bordeaux Métropole."""
-    SMALL_EXTRACT = """Bergerac est une commune française située dans le département de la Dordogne, en région Nouvelle-Aquitaine."""
-    REDUCED_EXTRACT1 = WIKI.limit_size_wiki(BIG_EXTRACT)
-    REDUCED_EXTRACT2 = WIKI.limit_size_wiki(SMALL_EXTRACT)
-    DRIVER = webdriver.Firefox()
-    WAIT = ui.WebDriverWait(DRIVER, 1000)
+    QUESTIONS = datas.QUESTIONS
+    BIG_EXTRACT = datas.BIG_EXTRACT
+    SMALL_EXTRACT = datas.SMALL_EXTRACT
 
     monkeypatch = MonkeyPatch()
 
+    # ---------- parser
     #1
     def test_create_list_from_sentence(self):
-        #checks wether the sentence is now a list of words
+        """checks wether the sentence is now a list of words"""
         parser = Parser(self.SAMPLE)
         is_list = parser.create_list_from_sentence()
         verif = True
@@ -53,187 +64,66 @@ class TestApiPro7():
 
     #2
     def test_crazy_parser(self):
-        #for each question concerning a location I want to test wether the answer will be "le pont Chaban-Delmas", "la tour Eiffel" ou "openClassrooms"
-        #I create a few question :
-        questions = ["où se trouve le pont Chaban-Delmas ?",#1
-        "Où se trouve le pont Chaban-Delmas ?",
-        "connais-tu le pont Chaban-Delmas ?",
-        "Connais-tu le pont Chaban-Delmas ?",
-        "connaissez-vous le pont Chaban-Delmas ?", #5
-        "Connaissez-vous le pont Chaban-Delmas ?",
-        "connais-tu l'adresse du pont Chaban-Delmas ?",
-        "Connais-tu l'adresse du pont Chaban-Delmas ?",
-        "connaissez-vous l'adresse du pont Chaban-Delmas ?",
-        "Connaissez-vous l'adresse du pont Chaban-Delmas ?", #10
-        "peux-tu me parler du pont Chaban-Delmas ?",
-        "Peux-tu me parler du pont Chaban-Delmas ?",
-        "pouvez-vous me parler du pont Chaban-Delmas ?",
-        "Pouvez-vous me parler du pont Chaban-Delmas ?",
-        "Que peux-tu me dire sur le pont Chaban-Delmas ?",#15
-        "Que pouvez-vous me dire sur le pont Chaban-Delmas ?",
-        "Que peux-tu me dire sur le pont Chaban-Delmas qui se trouve à Bordeaux ?",
-        "Que pouvez-vous me dire sur le pont Chaban-Delmas qui se trouve à Bordeaux ?",
-        "sais-tu quelque chose à propos du pont Chaban-Delmas ?",
-        "Sais-tu quelque chose à propos du pont Chaban-Delmas ?", #20
-        "savez-vous quelque chose à propos du pont Chaban-Delmas ?",
-        "Savez-vous quelque chose à propos du pont Chaban-Delmas ?",
-        "sais-tu quelque chose sur le pont Chaban-Delmas ?",
-        "Sais-tu quelque chose sur le pont Chaban-Delmas ?",
-        "savez-vous quelque chose sur le pont Chaban-Delmas ?",#25
-        "Savez-vous quelque chose sur le pont Chaban-Delmas ?",
-        "as-tu des informations sur le pont Chaban-Delmas ?",
-        "As-tu des informations sur le pont Chaban-Delmas ?",
-        "avez-vous des informations sur le pont Chaban-Delmas ?",
-        "Avez-vous des informations sur le pont Chaban-Delmas ?",#30
-        "Que connais-tu du pont Chaban-Delmas ?",
-        "Que connais-tu de la Tour Eiffel ?",
-        "Que connaissez-vous du pont Chaban-Delmas ?",
-        "Est-ce que tu connais le pont Chaban-Delmas ?",
-        "Est-ce que vous connaissez le pont Chaban-Delmas ?", #35
-        "Est-ce que tu connais l'adresse du pont Chaban-Delmas ? ",
-        "Est-ce que vous connaissez l'adresse du pont Chaban-Delmas ? ",
-        "Est-ce que vous connaissez l'adresse d'Openclassroom ? ",
-        "Où se situe le pont Chaban-Delmas ?",
-        "Où est le pont Chaban-Delmas ?"
-        ]
+        """for each question concerning a location I want to test wether the answer will be
+        "le pont Chaban-Delmas", "la tour Eiffel" ou 'openClassrooms'"""
         count = 0
-        for question in questions:
+        for question in self.QUESTIONS:
             parser = Parser(question)
             response = parser.crazy_parser()
-            if response in ["le pont Chaban-Delmas", "pont Chaban-Delmas", "la Tour Eiffel", 'Openclassroom']:
+            if response in ["le pont Chaban-Delmas", "pont Chaban-Delmas", \
+            "la Tour Eiffel", 'Openclassroom']:
                 count += 1
-        assert count == len(questions)
+            else:
+                count += 100
+                assert count == question, response
+        assert count == len(self.QUESTIONS)
 
     # ---------- geocoding
     #3
     def test_get_geocode(self):
-
-        def mock_get(*args, **kwargs):
-            return GeocodeMock()
+        """ mock a gmaps object to test the function"""
 
         # apply the monkeypatch for requests.get to mock_get
         self.monkeypatch.setattr(googlemaps, "Client", mock_get)
 
         result = self.GEOCODING.get_geocode()
-        assert result == "liste" 
+        assert result == "liste"
 
+    def test_extract_lat_long(self):
+        """ tests wether the function can get the wanted datas """
+        my_datas = {'geometry':{'location':{'lat':1, 'lng':2}}}
+        result = self.GEOCODING.extract_lat_long(my_datas)
+        assert result == {'lat':1, 'lng':2}
 
-    #4
-    def test_long_is_float(self):
-        verif = []
-        if isinstance(self.GEOCODING.latitude, float):
-            verif.append("lat is ok")
-        if isinstance(self.GEOCODING.longitude, float):
-            verif.append("long is ok")
-        assert verif == ['lat is ok', "long is ok"]
-
-    #5
-    def test_similarity_lat_long(self):
-        """Make a comparison between google coordinates and
-        Bing coordinates"""
-        bing_coord = [44.85, 0.48]
-        google_coord = [round(self.GEOCODING.latitude, 2), round(self.GEOCODING.longitude, 2)]
-        assert bing_coord == google_coord
-
-    # -------- wiki
+    # ---------- wiki
     #6
     def test_get_request(self):
         """Make sure to get a json resp"""
-        def mock_get(*args, **kwargs):
-            return WikiMock()
 
         # apply the monkeypatch for requests.get to mock_get
         self.monkeypatch.setattr(requests, "get", mock_get)
 
         my_params = {"a":"b"}
         # app.get_json, which contains requests.get, uses the monkeypatch
-        result = self.WIKI._get_request(my_params)
+        result = self.WIKI.get_request(my_params)
         assert result["response"] == "response from WikiApi"
     #7
-    def test_size_wiki_extract(self):
+    def test_limit_size_wiki_extract(self):
         """tests wether the extract can be reduced"""
-        assert len(self.REDUCED_EXTRACT1) <= 200
+        red_ext1 = self.WIKI.limit_size_wiki(self.BIG_EXTRACT)
+        red_ext2 = self.WIKI.limit_size_wiki(self.SMALL_EXTRACT)
+        if len(red_ext1) <= 200 and len(red_ext2) <= 200:
+            assert True
     #8
-    def test_size_wiki_extract2(self):
-        """tests the response in case of too small extract"""
-        assert len(self.REDUCED_EXTRACT2) <= 200
+    def test_access_page(self):
+        """ test wether the function can return 2 an url and a text"""
 
-    #9
-    def test_last_3_points(self):
-        """ tests wether the 3 last caracters are "..." """
-        three_last_caracters = self.REDUCED_EXTRACT1[len(self.REDUCED_EXTRACT1)-3:]
-        assert three_last_caracters == "..."
+        def get_resp(*args, **kwargs):
+            response = {'query': {'pages': {'1': {\
+            'extract' : "this is a text",\
+            'fullurl' : 'this is an url'}}}}
+            return response
+        self.monkeypatch.setattr(self.WIKI, "get_request", value=get_resp)
 
-    def _get_el(self, selector):
-        return self.DRIVER.find_element_by_css_selector(selector)
-
-    def open_page(self):
-        self.DRIVER.get("http://127.0.0.1:5000/")
-        my_button = self._get_el("button")
-        my_input = self._get_el("#myInput")
-        return my_input, my_button 
-
-    #10
-    def test_presence_input(self):
-        #tests the presence of the #myInput element 
-        my_input = self.open_page()[0]
-        assert my_input is not None
-
-    #11
-    def test_presence_button(self):
-        #tests the presence of the class .button element 
-        my_button = self.open_page()[1]
-        assert my_button is not None
-
-    #12
-    def test_ask_something(self):
-        #test wether the question is displayed
-        my_input, my_button = self.open_page()
-        start_question = "Où se trouve Bordeaux ?"
-        my_input.send_keys(start_question)
-        my_button.click()
-        self.WAIT.until(lambda driver: self.DRIVER.find_element_by_css_selector(".chatSelf .chat-message").is_displayed())
-        
-        chat_message = self._get_el(".chatSelf .chat-message")
-        text_question = chat_message.text
-        assert text_question == start_question
-
-    #13 
-    def test_error_message(self):
-        my_input, my_button = self.open_page()
-        start_question = ""
-        my_input.send_keys(start_question)
-        my_button.click()
-        self.WAIT.until(lambda driver: self.DRIVER.find_element_by_css_selector(".rep-chat-message").is_displayed())
-        
-        chat_message = self._get_el(".rep-chat-message")
-        response_text = chat_message.text
-        assert response_text == "Désolé je ne connais pas cet endroit ... Peut-être pourrais-tu reformuler ou me poser une autre question ?"
-
-    def first_caracters(self, text, size):
-        to_return = ""
-        for carac in text:
-            to_return += carac
-            if len(to_return) == size:
-                return to_return
-    #14 
-    def test_get_response_first_part(self):
-        my_input, my_button = self.open_page()
-        start_question = "Où se trouve Bordeaux ?"
-        my_input.send_keys(start_question)
-        my_button.click()
-        self.WAIT.until(lambda driver: self.DRIVER.find_element_by_css_selector(".rep-chat-message").is_displayed())
-        
-        chat_message = self._get_el(".rep-chat-message p:first-child")
-        answer1 = chat_message.text
-        answer1 = self.first_caracters(answer1, 32)
-        chat_message = self._get_el(".rep-chat-message p:nth-child(2)")
-        if chat_message is not None:
-            answer2 = True
-        chat_message = self._get_el(".rep-chat-message p:nth-child(3)")
-        answer3 = chat_message.text
-        answer3 = self.first_caracters(answer3, 8)
-        expected_answer = ["Laisse-moi t'en parler un peu :)", True, "Bordeaux"]
-        received_answer = [answer1, answer2, answer3]
-        self.DRIVER.quit()
-        assert expected_answer == received_answer
+        result = self.WIKI.access_page()
+        assert result == ('this is a text.', 'this is an url')

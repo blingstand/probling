@@ -12,8 +12,6 @@ def index():
     """load welcome page"""
     return render_template('index.html', title='Home')
 
-
-
 @app.route("/index/question", methods=["POST"])
 def question():
     """Answers the question"""
@@ -21,7 +19,7 @@ def question():
     parser = Parser(data["message"])
     parsed_msg = parser.crazy_parser()
     is_response = 0
-    print(parsed_msg)
+    print(">", parsed_msg)
     if parsed_msg is not None:
         is_response = 1
         geo_tool = GeoCoding(parsed_msg)
