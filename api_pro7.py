@@ -39,11 +39,12 @@ class Parser():
         sentence = self._take_off_courtesy(sentence)
         #no space
         list_of_words = sentence.split(" ")
+        print("list_of_words : ", list_of_words)
         try:
             list_of_words.remove("")
             
         except Exception as e:
-            raise e
+            pass
         response = []
         for word in list_of_words:
             if len(word) > 0:

@@ -31,12 +31,12 @@ let InteractionWithGPB = function(){
     timeoutID = window.setTimeout(function(){
       gPBMemory.then(function(resp){
           lastChatMessage = message.response();
-          if (resp["is_response"] == 1){
+          if (resp["is_response"]){
           const responseGPB = new Response(resp);
           console.log(resp)
           responseGPB.greatMessage(lastChatMessage);
           }else{
-              lastChatMessage.textContent = "Désolé je ne connais pas cet endroit ... \nPeut-être pourrais-tu reformuler ou me poser une autre question ?"
+              lastChatMessage.textContent = resp['message']
               let chatlogsSize = chatlogs.scrollHeight;
               
               message.scrollDown(chatlogsSize); 

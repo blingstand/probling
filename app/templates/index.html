@@ -2,39 +2,36 @@
 <html lang="fr">
 <head>
 
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" Access-Control-Allow-Origin: * />
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <title>Application GrandPy Bot</title>
     <link rel="stylesheet" href="../static/css/style.css" />
 
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCsqS4MLqsrTTmTkSCUNX97625NBJ4jXuI&language=fr">
+    <script async defer src="{{url_google}} ">
     </script>
     <script src="../static/js/ajax.js"></script>
     <script src="../static/js/message.js"></script>
     <script src="../static/js/response.js"></script>
     <script src="../static/js/main.js"></script>
 </head>
-<body>
-    <div class="chatbox">
-        <div id="chatlogs"> <!-- ------------------------------ -->
-            <div class="chatGPB">
-                <div class="GPB-photo"></div>
-                <p id="size" class="chat-message">Ah te voilà ! Que puis-je pour toi aujourd'hui ? Pose-moi une question ! </p>
-            </div>
-        </div><!-- --------------------------------------------- -->
+<div class="chatbox">
+    <div id="chatlogs"> 
+        <div class="chatGPB">
+            <div class="GPB-photo"></div>
+            <p id="size" class="chat-message">Ah te voilà ! Que puis-je pour toi aujourd'hui ? Pose-moi une question ! </p>
+        </div>
     </div>
-    
-    <div class="chat-form">
+</div>
 
-            <input type="text" placeholder="ex : Connais-tu l'adresse de ... ?" id="myInput" onkeypress="validate(event)" autofocus/>
-            <div id="last_line">
-                <p id="name">Adrien Clupot </p>
-                <a href="https://github.com/blingstand" target="_blank"><div id="github"></div></a>
-                <p><button type="button" onclick="InteractionWithGPB()">Valider</button></p>
+<div class="chat-form">
 
-            </div>
-    </div>
-    <div id="triangle"></div>
-    <!-- ------------------------------------- -->
-</body>
+        <input type="text" placeholder="ex : Connais-tu l'adresse de ... ?" id="myInput" onkeypress="validate(event)" autofocus/>
+        <div id="last_line">
+            <p id="name">Adrien Clupot </p>
+            <a href="https://github.com/blingstand" target="_blank"><div id="github"></div></a>
+            <p><button type="button" onclick="InteractionWithGPB()">Valider</button></p>
+
+        </div>
+</div>
+<div id="triangle"></div> <!-- to show that GPB is thinking -->
 </html>
 
