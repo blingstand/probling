@@ -7,7 +7,7 @@ class Message{
         // creates container and content in chatlogs with message from msgforGPB
         let selfChat = document.createElement("div");
         let userPhoto = document.createElement("div");
-        let selfMessage = document.createElement("p");
+        let selfMessage = document.createElement("div");
 
         //class from css
         // container.classList.add('container');
@@ -27,7 +27,7 @@ class Message{
         //creates element to answer
         let gPBChat = document.createElement("div");
         let userPhoto = document.createElement("div");
-        let gPBMessage = document.createElement("p");
+        let gPBMessage = document.createElement("div");
 
         //class from css
         // container.classList.add('container');

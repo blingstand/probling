@@ -30,7 +30,8 @@ def question():
             return jsonify({"is_response": is_response, "message":parsed_msg, "coordinates":coord, \
                 "summary":summary, "url":url})
         except:
-            is_response = False
-            message = "Désolé je ne connais pas cet endroit ... \nPeut-être pourrais-tu reformuler ou me poser une autre question ?"
-            return jsonify({"is_response": is_response, "message": message })
+            pass
+    is_response = False
+    message = "Désolé je ne connais pas cet endroit ... \nPeut-être pourrais-tu reformuler ou me poser une autre question ?"
+    return jsonify({"is_response": is_response, "message": message })
     

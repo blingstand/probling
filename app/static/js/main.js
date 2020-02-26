@@ -32,14 +32,14 @@ let InteractionWithGPB = function(){
       gPBMemory.then(function(resp){
           lastChatMessage = message.response();
           if (resp["is_response"]){
-          const responseGPB = new Response(resp);
-          console.log(resp)
-          responseGPB.greatMessage(lastChatMessage);
+            const responseGPB = new Response(resp);
+            console.log(resp)
+            responseGPB.greatMessage(lastChatMessage);
           }else{
-              lastChatMessage.textContent = resp['message']
-              let chatlogsSize = chatlogs.scrollHeight;
-              
-              message.scrollDown(chatlogsSize); 
+            lastChatMessage.textContent = resp['message']
+            let chatlogsSize = chatlogs.scrollHeight;
+            
+            message.scrollDown(chatlogsSize); 
           }
         })
       triangle.classList.remove("animation");

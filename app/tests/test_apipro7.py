@@ -193,8 +193,7 @@ class TestApiPro7():
 
         chat_message = get_el(".rep-chat-message")
         response_text = chat_message.text
-        assert response_text == "Désolé je ne connais pas cet endroit ...\
-         Peut-être pourrais-tu reformuler ou me poser une autre question ?"
+        assert response_text[0:6] == "Désolé"
 
     #13
     def test_get_response(self):
@@ -203,7 +202,8 @@ class TestApiPro7():
         start_question = "Où se trouve Bordeaux ?"
         my_input.send_keys(start_question)
         my_button.click()
-        WAIT.until(lambda driver: DRIVER.find_element_by_css_selector(".rep-chat-message").is_displayed())
+        WAIT.until(lambda driver: DRIVER.find_element_by_css_selector\
+            (".rep-chat-message").is_displayed())
 
         chat_message = get_el(".rep-chat-message p:first-child")
         answer1 = chat_message.text
