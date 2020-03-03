@@ -29,12 +29,12 @@ Ce projet utilise python 3.8.0 et flask 1.1.1 [plus d'information](https://githu
 
 Les tests réalisés se lancent avec pytest, cependant il y a une spécificté. Pour tester le parcours utilisateur j'ai écrit des tests dans app/tests/test_us.py donc si vous lancez : 
 
-* pytest/app/tests/test_us.py
+* pytest app/tests/test_us.py
 
 
 Vous n'allez tester QUE le parcours utilisateur, soient 6 fonctions pour plus d'une minute. J'ai trouvé ça long (mais néanmoins nécessaire dans le cadre de ma formation). J'ai donc créé une alternative qui est de lancer le serveur puis de lancer l'autre test app/tests/test_apipro7.py : 
 
 * python app.py #le serveur démarre
-* pytest/app/tests/test_apipro7.py
+* pytest app/tests/test_apipro7.py
 
 **Cette methode présente l'avantage d'être exhaustive et plus rapide**.
