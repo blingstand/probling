@@ -2,7 +2,7 @@
 # -*- coding: utf8 -*-
 """
     Before to throw Pytest please run the app
-    I don't test pivate method
+    note : I don't test pivate method
 """
 
 from _pytest.monkeypatch import MonkeyPatch
@@ -20,7 +20,7 @@ WAIT = ui.WebDriverWait(DRIVER, 1000)
 URL = "http://127.0.0.1:5000/"
 
 
-# -------- usefull function for testing
+# -------- usefull functions for testing
 def mock_get(*args, **kwargs):
     """ create a Mymock """
     return MyMock()
@@ -45,6 +45,15 @@ def first_caracters(text, size):
             if len(to_return) == size:
                 return to_return
     return text
+
+def starter(question, elem_to_wait):
+    my_input, my_button = open_page()
+    start_question = question
+    my_input.send_keys(start_question)
+    my_button.click()
+    WAIT.until(lambda driver: DRIVER.find_element_by_css_selector(\
+     elem_to_wait).is_displayed())
+    return my_input, my_button
 
 #Mockclass with 2 method
 class MyMock:
@@ -170,13 +179,9 @@ class TestApiPro7():
     #11
     def test_ask_something(self):
         """test wether the question is displayed"""
-        my_input, my_button = open_page()
         start_question = "Où se trouve Bordeaux ?"
-        my_input.send_keys(start_question)
-        my_button.click()
-        WAIT.until(lambda driver: DRIVER.find_element_by_css_selector(\
-            ".chatSelf .chat-message").is_displayed())
-
+        starter(start_question,".chatSelf .chat-message" )
+        
         chat_message = get_el(".chatSelf .chat-message")
         text_question = chat_message.text
         assert text_question == start_question
@@ -184,13 +189,8 @@ class TestApiPro7():
     #12
     def test_error_message(self):
         """ test wether error msg works """
-        my_input, my_button = open_page()
-        start_question = ""
-        my_input.send_keys(start_question)
-        my_button.click()
-        WAIT.until(lambda driver: DRIVER.find_element_by_css_selector\
-            (".rep-chat-message").is_displayed())
-
+        starter("", ".rep-chat-message")
+        
         chat_message = get_el(".rep-chat-message")
         response_text = chat_message.text
         assert response_text[0:6] == "Désolé"
@@ -198,13 +198,8 @@ class TestApiPro7():
     #13
     def test_get_response(self):
         """In case of answer test wether everything is good"""
-        my_input, my_button = open_page()
-        start_question = "Où se trouve Bordeaux ?"
-        my_input.send_keys(start_question)
-        my_button.click()
-        WAIT.until(lambda driver: DRIVER.find_element_by_css_selector\
-            (".rep-chat-message").is_displayed())
-
+        my_input, my_button = starter("Où se trouve Bordeaux ?", ".rep-chat-message")
+        
         chat_message = get_el(".rep-chat-message p:first-child")
         answer1 = chat_message.text
         answer1 = first_caracters(answer1, 32)
