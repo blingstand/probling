@@ -158,7 +158,12 @@ class TestApiPro7():
             'extract' : "this is a text",\
             'fullurl' : 'this is an url'}}}}
             return response
+        
+        def get_sug(): 
+            return "suggestion"
+
         self.monkeypatch.setattr(self.WIKI, "get_request", value=get_resp)
+        self.monkeypatch.setattr(self.WIKI, "get_suggestion", value=get_sug)
 
         result = self.WIKI.access_page()
         assert result == ('this is a text.', 'this is an url')
