@@ -179,7 +179,19 @@ class WikiDatas(): #3 methods
         params['format'] = "json"
         params['action'] = "query"
         response = requests.get(self.base, params=params)
+        print(response.url)
         return response.json()
+
+    def get_suggestion(self):
+        """ returns the first answer from a get_request method """
+        params = {
+            'list': 'search',
+            'srinfo': 'suggestion',
+            'srsearch' : self.title}
+        response = self.get_request(params)
+        suggestion = response['query']['search'][0]["title"]
+        print(suggestion)
+        return suggestion
 
     def limit_size_wiki(self, my_text):
         """limits the size of the wiki text and
@@ -209,23 +221,29 @@ class WikiDatas(): #3 methods
             4/ reduce the size of the summary
 
             """
+        suggestion = self.get_suggestion()
+
         params = {
             'prop' : 'extracts|info',
             'exlimit' : 1,
             'inprop': 'url',
-            'ppprop': 'disambiguation',
             'redirects': '',
             'exintro' : "",
             'explaintext' : "",
-            'titles' : self.title
+            'titles' : suggestion
         }
         response = self.get_request(params)
+        print("***"*30)
         get_id = response['query']['pages']
         for i in get_id:
             pageid = i
-        big_summary = response['query']['pages'][pageid]['extract']
-        url = response['query']['pages'][pageid]['fullurl']
+        try:
+            big_summary = response['query']['pages'][pageid]['extract']
+            url = response['query']['pages'][pageid]['fullurl']
+            summary = self.limit_size_wiki(big_summary)
+            return summary, url
+        except Exception as e:
+            raise(e)
 
-        summary = self.limit_size_wiki(big_summary)
-        return summary, url
+      
         

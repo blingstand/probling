@@ -22,16 +22,15 @@ def question():
     is_response = True
     print("Mot recherché >", parsed_msg)
     if parsed_msg is not None:
-        try : 
-            geo_tool = GeoCoding(parsed_msg)
-            coord = [round(geo_tool.latitude, 5), round(geo_tool.longitude, 5)]
-            wiki = WikiDatas(parsed_msg, 200)
-            summary, url = wiki.access_page()
-            return jsonify({"is_response": is_response, "message":parsed_msg, "coordinates":coord, \
-                "summary":summary, "url":url})
-        except:
-            pass
+        geo_tool = GeoCoding(parsed_msg)
+        coord = [round(geo_tool.latitude, 5), round(geo_tool.longitude, 5)]
+        wiki = WikiDatas(parsed_msg, 200)
+        summary, url = wiki.access_page()
+        return jsonify({"is_response": is_response, "message":parsed_msg, "coordinates":coord, \
+            "summary":summary, "url":url})
+
     is_response = False
-    message = "Désolé je ne connais pas cet endroit ... \nPeut-être pourrais-tu reformuler ou me poser une autre question ?"
+    message = "Désolé je ne connais pas cet endroit ... \nPeut-être pourrais-tu \
+    reformuler ou me poser une autre question ?"
     return jsonify({"is_response": is_response, "message": message })
     
